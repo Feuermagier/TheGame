@@ -1,0 +1,128 @@
+Game to analyze: 
+|	[S, S, S]
+|	[S, S, S]
+|	[0, 0, 0]
+|	[0, 0, 0]
+|	[0, 0, 0]
+|	[W, W, W]
+|	[W, W, W]
+
+Working...
+
+
+12 virtual cores available
+Going to use 11 threads for calculation
+
+----------------------------------------------
+pool-1-thread-1 started its work on
+|	[S, S, S]
+|	[0, S, S]
+|	[S, 0, 0]
+|	[0, 0, 0]
+|	[W, 0, 0]
+|	[0, W, W]
+|	[W, W, W]
+
+pool-1-thread-2 started its work on
+|	[S, S, S]
+|	[S, 0, S]
+|	[0, S, 0]
+|	[0, 0, 0]
+|	[W, 0, 0]
+|	[0, W, W]
+|	[W, W, W]
+
+pool-1-thread-3 started its work on
+|	[S, S, S]
+|	[S, S, 0]
+|	[0, 0, S]
+|	[0, 0, 0]
+|	[W, 0, 0]
+|	[0, W, W]
+|	[W, W, W]
+
+pool-1-thread-4 started its work on
+|	[S, S, S]
+|	[0, S, S]
+|	[S, 0, 0]
+|	[0, 0, 0]
+|	[0, W, 0]
+|	[W, 0, W]
+|	[W, W, W]
+
+pool-1-thread-7 started its work on
+|	[S, S, S]
+|	[0, S, S]
+|	[S, 0, 0]
+|	[0, 0, 0]
+|	[0, 0, W]
+|	[W, W, 0]
+|	[W, W, W]
+
+pool-1-thread-6 started its work on
+|	[S, S, S]
+|	[S, S, 0]
+|	[0, 0, S]
+|	[0, 0, 0]
+|	[0, W, 0]
+|	[W, 0, W]
+|	[W, W, W]
+
+pool-1-thread-5 started its work on
+|	[S, S, S]
+|	[S, 0, S]
+|	[0, S, 0]
+|	[0, 0, 0]
+|	[0, W, 0]
+|	[W, 0, W]
+|	[W, W, W]
+
+pool-1-thread-8 started its work on
+|	[S, S, S]
+|	[S, 0, S]
+|	[0, S, 0]
+|	[0, 0, 0]
+|	[0, 0, W]
+|	[W, W, 0]
+|	[W, W, W]
+
+pool-1-thread-9 started its work on
+|	[S, S, S]
+|	[S, S, 0]
+|	[0, 0, S]
+|	[0, 0, 0]
+|	[0, 0, W]
+|	[W, W, 0]
+|	[W, W, W]
+
+pool-1-thread-5 finished after 679022264μs. Looking for new work...
+
+pool-1-thread-4 finished after 2204014174μs. Looking for new work...
+
+pool-1-thread-1 finished after 2403746794μs. Looking for new work...
+
+pool-1-thread-6 finished after 2708230914μs. Looking for new work...
+
+Finished opening:
+|	[S, S, S]
+|	[S, S, S]
+|	[0, 0, 0]
+|	[0, 0, 0]
+|	[0, W, 0]
+|	[W, 0, W]
+|	[W, W, W]
+--> White wins
+
+
+--------------------------------------------------------
+White wins!
+
+
+Metrics:
+
+	Simulation took 2708416472μs
+	~142547422145 turns simulated
+	~4237700453 games simulated
+	A game took an average of 33 turns
+
+Process finished with exit code 0

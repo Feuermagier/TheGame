@@ -1,0 +1,223 @@
+Game to analyze: 
+|	[S, S, S, S]
+|	[0, S, S, 0]
+|	[0, 0, 0, 0]
+|	[0, 0, 0, 0]
+|	[0, W, W, 0]
+|	[W, W, W, W]
+
+Working...
+
+
+12 virtual cores available
+Going to use a maximum of 11 threads for calculation
+
+----------------------------------------------
+pool-1-thread-1 started its work on
+|	[0, S, S, S]
+|	[S, S, S, 0]
+|	[0, 0, 0, 0]
+|	[0, W, 0, 0]
+|	[0, 0, W, 0]
+|	[W, W, W, W]
+
+pool-1-thread-4 started its work on
+|	[S, S, S, S]
+|	[0, S, 0, 0]
+|	[0, 0, S, 0]
+|	[0, W, 0, 0]
+|	[0, 0, W, 0]
+|	[W, W, W, W]
+
+pool-1-thread-3 started its work on
+|	[S, S, S, S]
+|	[0, 0, S, 0]
+|	[0, S, 0, 0]
+|	[0, W, 0, 0]
+|	[0, 0, W, 0]
+|	[W, W, W, W]
+
+pool-1-thread-2 started its work on
+|	[S, S, S, 0]
+|	[0, S, S, S]
+|	[0, 0, 0, 0]
+|	[0, W, 0, 0]
+|	[0, 0, W, 0]
+|	[W, W, W, W]
+
+pool-1-thread-5 started its work on
+|	[0, S, S, S]
+|	[S, S, S, 0]
+|	[0, 0, 0, 0]
+|	[0, 0, W, 0]
+|	[0, W, 0, 0]
+|	[W, W, W, W]
+
+pool-1-thread-7 started its work on
+|	[S, S, S, S]
+|	[0, 0, S, 0]
+|	[0, S, 0, 0]
+|	[0, 0, W, 0]
+|	[0, W, 0, 0]
+|	[W, W, W, W]
+
+pool-1-thread-9 started its work on
+|	[0, S, S, S]
+|	[S, S, S, 0]
+|	[0, 0, 0, 0]
+|	[0, 0, 0, 0]
+|	[W, W, W, 0]
+|	[0, W, W, W]
+
+pool-1-thread-6 started its work on
+|	[S, S, S, 0]
+|	[0, S, S, S]
+|	[0, 0, 0, 0]
+|	[0, 0, W, 0]
+|	[0, W, 0, 0]
+|	[W, W, W, W]
+
+pool-1-thread-10 started its work on
+|	[S, S, S, 0]
+|	[0, S, S, S]
+|	[0, 0, 0, 0]
+|	[0, 0, 0, 0]
+|	[W, W, W, 0]
+|	[0, W, W, W]
+
+pool-1-thread-8 started its work on
+|	[S, S, S, S]
+|	[0, S, 0, 0]
+|	[0, 0, S, 0]
+|	[0, 0, W, 0]
+|	[0, W, 0, 0]
+|	[W, W, W, W]
+
+pool-1-thread-11 started its work on
+|	[S, S, S, S]
+|	[0, 0, S, 0]
+|	[0, S, 0, 0]
+|	[0, 0, 0, 0]
+|	[W, W, W, 0]
+|	[0, W, W, W]
+
+pool-1-thread-4 finished after 97889445μs. Looking for new work...
+
+pool-1-thread-4 started its work on
+|	[S, S, S, S]
+|	[0, S, 0, 0]
+|	[0, 0, S, 0]
+|	[0, 0, 0, 0]
+|	[W, W, W, 0]
+|	[0, W, W, W]
+
+pool-1-thread-7 finished after 220596993μs. Looking for new work...
+
+pool-1-thread-7 started its work on
+|	[0, S, S, S]
+|	[S, S, S, 0]
+|	[0, 0, 0, 0]
+|	[0, 0, 0, 0]
+|	[0, W, W, W]
+|	[W, W, W, 0]
+
+pool-1-thread-10 finished after 395636564μs. Looking for new work...
+
+pool-1-thread-10 started its work on
+|	[S, S, S, 0]
+|	[0, S, S, S]
+|	[0, 0, 0, 0]
+|	[0, 0, 0, 0]
+|	[0, W, W, W]
+|	[W, W, W, 0]
+
+pool-1-thread-4 finished after 584851929μs. Looking for new work...
+
+pool-1-thread-4 started its work on
+|	[S, S, S, S]
+|	[0, 0, S, 0]
+|	[0, S, 0, 0]
+|	[0, 0, 0, 0]
+|	[0, W, W, W]
+|	[W, W, W, 0]
+
+pool-1-thread-8 finished after 1110775489μs. Looking for new work...
+
+pool-1-thread-8 started its work on
+|	[S, S, S, S]
+|	[0, S, 0, 0]
+|	[0, 0, S, 0]
+|	[0, 0, 0, 0]
+|	[0, W, W, W]
+|	[W, W, W, 0]
+
+Finished opening:
+|	[S, S, S, S]
+|	[0, S, S, 0]
+|	[0, 0, 0, 0]
+|	[0, 0, W, 0]
+|	[0, W, 0, 0]
+|	[W, W, W, W]
+--> Black wins
+
+pool-1-thread-3 finished after 1156439353μs. Looking for new work...
+
+Finished opening:
+|	[S, S, S, S]
+|	[0, S, S, 0]
+|	[0, 0, 0, 0]
+|	[0, W, 0, 0]
+|	[0, 0, W, 0]
+|	[W, W, W, W]
+--> Black wins
+
+pool-1-thread-6 finished after 1331216873μs. Looking for new work...
+
+pool-1-thread-4 finished after 648680744μs. Looking for new work...
+
+pool-1-thread-2 finished after 1356814337μs. Looking for new work...
+
+pool-1-thread-9 finished after 1386537793μs. Looking for new work...
+
+Finished opening:
+|	[S, S, S, S]
+|	[0, S, S, 0]
+|	[0, 0, 0, 0]
+|	[0, 0, 0, 0]
+|	[W, W, W, 0]
+|	[0, W, W, W]
+--> Black wins
+
+pool-1-thread-7 finished after 1172955419μs. Looking for new work...
+
+pool-1-thread-11 finished after 1395287550μs. Looking for new work...
+
+pool-1-thread-1 finished after 1414154351μs. Looking for new work...
+
+pool-1-thread-5 finished after 1446467875μs. Looking for new work...
+
+pool-1-thread-10 finished after 1053012723μs. Looking for new work...
+
+Finished opening:
+|	[S, S, S, S]
+|	[0, S, S, 0]
+|	[0, 0, 0, 0]
+|	[0, 0, 0, 0]
+|	[0, W, W, W]
+|	[W, W, W, 0]
+--> Black wins
+
+
+
+--------------------------------------------------------
+Black wins!
+
+
+Metrics:
+
+	Simulation took 1448719665μs
+	~80389551488 turns simulated
+	~2826893522 games simulated
+	A game took an average of 28 turns
+
+Process finished with exit code 0
