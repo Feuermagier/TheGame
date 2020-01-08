@@ -21,13 +21,13 @@ public class TheGame {
     public boolean runFromState(Field field, int depth) {
 
         List<Field> whiteTurns = getPossibleTurns(field, WHITE);
-        boolean onePositiveTurn = false;
         if (isWinPredictable(field, WHITE)) {
             //System.out.println(tabs(depth) + "White will win");
             turnCount += depth + 1;
             gameCount++;
             return true;
         }
+        boolean onePositiveTurn = false;
         for (Field whiteTurn : whiteTurns) {
             /////////////
             //System.out.println(tabs(depth+1) + "Depth: " + (depth+1) + ", White's turn");
