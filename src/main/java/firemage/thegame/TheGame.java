@@ -152,17 +152,18 @@ public class TheGame {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        long startTime = System.nanoTime();
-        int[][] field = {{-1, -1, -1, -1}, {0, -1, -1, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 1, 1, 0}, {1, 1, 1, 1}};
+        int[][] field = {{-1, -1, -1, -1}, {-1, -1, -1, -1}, {0, 0, 0, 0}, {1, 1, 1, 1}, {1, 1, 1, 1}};
         System.out.println("Game to analyze: ");
         System.out.println(arrayToString(field, 1));
         System.out.println("\nWorking...\n\n");
-        //boolean player = new TheGame().runFromState(new Field(field), 0);
-        boolean player = new TheGame().setupThreads(new Field(field));
+        long startTime = System.nanoTime();
+        boolean player = new TheGame().runFromState(new Field(field), 0);
+        //boolean player = new TheGame().setupThreads(new Field(field));
+        long endTime = System.nanoTime();
         System.out.println("\n\n--------------------------------------------------------");
         System.out.println(player ? "White wins!" : "Black wins!");
         System.out.println("\n\nMetrics:\n");
-        System.out.println("\tSimulation took " + (System.nanoTime() - startTime)/1000 + "μs");
+        System.out.println("\tSimulation took " + (endTime - startTime)/1000 + "μs");
         System.out.println("\t~" + turnCount + " turns simulated");
         System.out.println("\t~" + gameCount + " games simulated");
         System.out.println("\tA game took an average of " + (turnCount/gameCount) + " turns");
