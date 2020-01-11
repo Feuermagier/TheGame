@@ -41,31 +41,37 @@ int main(void) {
         cerr << "File has an invalid format. Continuing parsing." << endl;
     } 
 
-    // Supposing there is at least one field
-    vector<int> fieldList(xDim * yDim);
+    vector<int> fieldList(0);
     int fieldCount = 0;
 
     char pos;
-    file >> pos;
-    if (pos == FIELD_SEPARATOR)
-        fieldCount++;
-    else if (pos == 'W')
-        fieldList.push_back(WHITE);
-    else if (pos == 'S')
-        fieldList.push_back(BLACK);
-    else if (pos == '0')
-        fieldList.push_back(WHITE);
-    else {
-        cerr << "File has wrong format" << endl;
-        return(-1);
-    }    
+    while(file >> pos) {
+        if (pos == FIELD_SEPARATOR)
+            fieldCount++;
+        else if (pos == 'W')
+            fieldList.push_back(WHITE);
+        else if (pos == 'S')
+            fieldList.push_back(BLACK);
+        else if (pos == '0')
+            fieldList.push_back(EMPTY);
+        else {
+            cerr << "File has wrong format" << endl;
+            return(-1);
+        }    
+    }
 
     file.close();
-    printf("Field count: %d\n", fieldCount);
     cout << "Field count: " << fieldCount << endl;
     cout << "XDim: " << xDim << ", YDim: " << yDim << endl;
     cout << "Starting player: " << player << endl;
 
     // Run simulation on device
-    //vector<bool> results = gameRunner(fieldList, fieldCount, xDim, yDim, player);
+    vector<int> results = gameRunner(fieldList, fieldCount, xDim, yDim, player);
+
+    
+    for (int i = 0; i < results.size(); i++) {
+        cout << i << ": " << results[i] << endl;
+    }
+
+    return 0;
 }

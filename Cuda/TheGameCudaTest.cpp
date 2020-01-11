@@ -1,4 +1,6 @@
 #include <iostream>
+#include <fstream>
+#include <string>
 #include <math.h>
 #include <chrono>
 
@@ -19,6 +21,8 @@ int* addFieldToList(int* list, int listSize, int* field, int xDim, int yDim);
 void printField(int* field, int xDim, int yDim, int tabs);
 void printTabs(int count);
 
+int* readFile(char* filename);
+
 const int WHITE = 1;
 const int BLACK = -1;
 const int EMPTY = 0;
@@ -31,6 +35,7 @@ int turnCount = 0;
 int gameCount = 0;
 
 int main(void) {
+    /*
     int xDim = 3, yDim = 3;
     int* field = (int*) malloc(xDim * yDim * sizeof(int));
     memset(field, 0, xDim * yDim * sizeof(int));        // Init array with zeros
@@ -47,6 +52,7 @@ int main(void) {
 
     printField(field, xDim, yDim, 0);
     printf("\n\n");
+    */
 
     /*
     int player = WHITE;
@@ -73,6 +79,7 @@ int main(void) {
     */
 
 
+/*
 
     int turnCount = 0;
     int player = WHITE;
@@ -117,6 +124,58 @@ int main(void) {
         std::cout << std::endl;
         printField(getFieldFromList(turnList, i, xDim, yDim), xDim, yDim, 0);
     }
+    */
+
+
+    std::ifstream file("output.txt");
+    if (!file.is_open()) {
+        return -1;
+    }
+    int xDim = file.get() - '0';
+    file.get();
+    int yDim = file.get() - '0';
+    //file.get();
+
+    int* turnList = (int*) malloc(1);
+    int totalFieldCount = 0;
+
+    char pos;
+    int x = 0, y = 0;
+    int* field = turnList;
+    while (file.get(pos)) {
+        if (pos == ';') {
+            turnList = (int*) realloc(turnList, (totalFieldCount + 1) * xDim * yDim * sizeof(int));
+            x = 0;
+            y = 0;
+            field = turnList + totalFieldCount * xDim * yDim;
+            totalFieldCount++;
+        } else { 
+            if (pos == '0') {
+                setValueAt(x, y, EMPTY, field, xDim, yDim);
+            } else if (pos == 'S') {
+                setValueAt(x, y, BLACK, field, xDim, yDim);
+            } else if (pos == 'W') {
+                setValueAt(x, y, WHITE, field, xDim, yDim);
+            }
+            y++;
+            if (y >= yDim) {
+                x++;
+                y = 0;
+            }
+            //printField(field, xDim, yDim, 0);
+        }
+    }
+    file.close();
+    totalFieldCount--;
+    printf("Field count: %d\n", totalFieldCount);
+    /*
+    for (int i = 0; i < totalFieldCount; i++) {
+        std::cout << std::endl;
+        printField(getFieldFromList(turnList, i, xDim, yDim), xDim, yDim, 0);
+    }
+    */
+
+    free(turnList);
 }
 
 // Returns true if the given player can win
@@ -201,7 +260,9 @@ bool executeTurn(int* field, int xDim, int yDim, int player, int depth) {
 
 int* determineTurns(int* field, int xDim, int yDim, int player, int* count) {
 
+    printf("Before list init\n");
     int* list = (int*) malloc(1);
+    printf("After after init\n");
 
     int i = 0;
     for (int x = 0; x < xDim; x++) {
@@ -246,7 +307,7 @@ int* determineTurns(int* field, int xDim, int yDim, int player, int* count) {
             }
         }
     }
-    *count = i; 
+    *count = i;
     return list;
 }
 
@@ -262,7 +323,9 @@ int* getFieldFromList(int* list, int index, int xDim, int yDim) {
 
 int* addFieldToList(int* list, int listSize, int* field, int xDim, int yDim) {
     int* newList = (int*) realloc(list, (listSize + 1) * xDim * yDim * sizeof(int));
-    copyArrayTo(field, getFieldFromList(list, listSize, xDim, yDim), xDim, yDim);
+    int* tmp = getFieldFromList(list, listSize, xDim, yDim);
+    printf("%p || %p || %d\n", newList, tmp, listSize * xDim * yDim * sizeof(int));
+    copyArrayTo(field, tmp, xDim, yDim);
     return newList;
 }
 

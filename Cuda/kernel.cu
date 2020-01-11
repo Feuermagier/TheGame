@@ -11,16 +11,6 @@
 using namespace std;
 
 
-// Expensive, use not that often
-// Returns a pointer to a newly allocated array for the field
-__device__
-int* getFieldFromList(int* list, int index, int xDim, int yDim) {
-    int* field = (int*) malloc(xDim * yDim * sizeof(int));
-    memcpy(field, &list[xDim * yDim * index], xDim * yDim * sizeof(int));
-    return field;
-}
-
-
 __device__
 int getValueAt(int x, int y, int* field, int xDim, int yDim) {
     return field[x * yDim + y];
@@ -38,15 +28,14 @@ bool executeTurn(int* field, int xDim, int yDim, int player, int depth) {
     for (int x = 0; x < xDim; x++) {
         for (int y = 0; y < yDim; y++) {
             if (getValueAt(x, y, field, xDim, yDim) == player) {
-
                 // Try all movements
+                //printf("Found one at %d, %d\n", x, y);
                 for (int dir = -1; dir <= 1; dir++) {
                     int xNew = x - player;
                     int yNew = y + dir;
 
                     // Check if the new position is inside the field boundaries
                     if (xNew >= 0 && xNew < xDim && yNew >= 0 && yNew < yDim) {
-
                         // Store state of the target position
                         int newPosition = getValueAt(xNew, yNew, field, xDim, yDim);
 
@@ -57,27 +46,25 @@ bool executeTurn(int* field, int xDim, int yDim, int player, int depth) {
 
                         // True if moveAllowed == 0
                         if (!moveAllowed) {
+                            //printf("Can move from %d, %d to %d, %d\n", x, y, xNew, yNew);
 
                             // Set new positions
                             setValueAt(x, y, EMPTY, field, xDim, yDim);
                             setValueAt(xNew, yNew, player, field, xDim, yDim);
-
 
                             // Check if a win condition is reached
                             if (xNew == (1 - player)/2 * (xDim - 1)) {
                                 // Revert changes
                                 setValueAt(x, y, player, field, xDim, yDim);
                                 setValueAt(xNew, yNew, newPosition, field, xDim, yDim);
-
                                 return true;
                             }
 
                             // Check if the enemy cannot win after this turn, then return true: If you execute this turn, you will win
-                            bool canEnemyWin = executeTurn(field, xDim, yDim, -player, depth + 1);
+                            bool canEnemyWin = executeTurn(field, xDim, yDim, -1 * player, depth + 1);
                             // Revert changes
                             setValueAt(x, y, player, field, xDim, yDim);
                             setValueAt(xNew, yNew, newPosition, field, xDim, yDim);
-
                             if (!canEnemyWin) {
                                 return true;
                             }
@@ -95,12 +82,23 @@ __global__
 void gameRunnerKernel(int* fieldList, int fieldCount, int xDim, int yDim, int player, int* results) {
     int index = blockIdx.x * blockDim.x + threadIdx.x;
     int stride = blockDim.x * gridDim.x;
+    extern __shared__ int fieldCache[];
+    //int* field = (int*) malloc(xDim * yDim * sizeof(int));
 
     for (int i = index; i < fieldCount; i += stride) {
         // Copy field to local memory
-        int* field = getFieldFromList(fieldList, i, xDim, yDim);
+        memcpy(&fieldCache[threadIdx.x * xDim * yDim], &fieldList[xDim * yDim * i], xDim * yDim * sizeof(int));
+        /*
+        printf("%d %d\n", field[0], field[1]);
+        printf("%d %d\n", field[2], field[3]);
+        printf("%d %d\n", field[4], field[5]);
+        printf("%d %d\n", field[6], field[7]);
+        printf("%d %d\n", field[8], field[9]);
+        printf("%d %d\n\n", field[10], field[11]);    
+        */
+
         // Run game simulation
-        bool canWin = executeTurn(field, xDim, yDim, player, 0);
+        bool canWin = executeTurn(&fieldCache[threadIdx.x * xDim * yDim], xDim, yDim, player, 0);
         // Set result array according to the result
         if (canWin) {
             results[i] = 1;
@@ -113,6 +111,7 @@ void gameRunnerKernel(int* fieldList, int fieldCount, int xDim, int yDim, int pl
 
 vector<int> gameRunner(vector<int> fieldList, int fieldCount, int xDim, int yDim, int player) {
 
+    /*
     // Copy field data to the device
     dev_array<int> devFieldList(fieldList.size());
     devFieldList.set(&fieldList[0], fieldList.size());
@@ -121,16 +120,28 @@ vector<int> gameRunner(vector<int> fieldList, int fieldCount, int xDim, int yDim
     vector<int> results(fieldCount);
     dev_array<int> deviceResults(fieldCount);
     deviceResults.set(&results[0], fieldCount);
+    */
 
+    int* devFieldList;
+    cudaMallocManaged(&devFieldList, fieldList.size() * sizeof(int));
+    cudaMemcpy(devFieldList, &fieldList[0], fieldList.size() * sizeof(int), cudaMemcpyHostToDevice);
+
+    vector<int> results(fieldCount);
+    int* deviceResults;
+    cudaMallocManaged(&deviceResults, fieldCount * sizeof(int));
+    cudaMemcpy(deviceResults, &results[0], fieldCount * sizeof(int), cudaMemcpyHostToDevice);
 
     int blockSize = 256;
-    int numBlocks = (fieldCount + blockSize - 1) / blockSize;
-    gameRunnerKernel<<<numBlocks, blockSize>>>(devFieldList.getData(), fieldCount, xDim, yDim, player, deviceResults.getData());
+    int blockCount = (fieldCount + blockSize - 1) / blockSize;
+    gameRunnerKernel<<<blockCount, blockSize, blockSize * xDim * yDim * sizeof(int)>>>(devFieldList, fieldCount, xDim, yDim, player, deviceResults);
+    //gameRunnerKernel<<<1, 32>>>(devFieldList, fieldCount, xDim, yDim, player, deviceResults);
+
+    error = cudaDeviceSynchronize();
+    cout << error << endl;
 
     // Copy data back to the host
-    deviceResults.set(&results[0], fieldCount);
-
-    cudaDeviceSynchronize();
+    //deviceResults.set(&results[0], fieldCount);
+    cudaMemcpy(&results[0], deviceResults, fieldCount * sizeof(int), cudaMemcpyDeviceToHost);
 
     return results;
 }

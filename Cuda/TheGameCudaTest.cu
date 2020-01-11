@@ -30,12 +30,12 @@ int* getFieldFromList(int* list, int index, int xDim, int yDim) {
 
 __device__ __host__
 int getValueAt(int x, int y, int* field, int xDim, int yDim) {
-    return *(field + x * yDim + y);
+    return field[x * yDim + y];
 }
 
 __device__ __host__
 void setValueAt(int x, int y, int newValue, int* field, int xDim, int yDim) {
-    *(field + x * yDim + y) = newValue;
+    field[x * yDim + y]; = newValue;
 }
 
 __device__ __host__
@@ -69,12 +69,14 @@ int* arrayCopy(int* array, int xDim, int yDim) {
     return copied;
 }
 
+__device__ __host__
 void printTabs(int count) {
     for (int i = 0; i < count ; i++) {
         printf("|  ");
     }
 }
 
+__device__ __host__
 void printField(int* field, int xDim, int yDim, int tabs) {
     for (int x = 0; x < xDim; x++) {
         printTabs(tabs);
@@ -102,7 +104,7 @@ bool fieldEquals(int* fieldOne, int* fieldTwo, int xDim, int yDim) {
 //////////////////////////////////////////////////////////////////////////////
 
 // Returns true if the given player can win
-__device__ __host__
+__device__
 bool executeTurn(int* field, int xDim, int yDim, int player, int depth) {
     /*
     if (depth <= 3) {
@@ -111,11 +113,12 @@ bool executeTurn(int* field, int xDim, int yDim, int player, int depth) {
         printField(field, xDim, yDim, depth);
     }
     */
-
+    printf("Hey 1\n");
     int moveCount = 0;
     for (int x = 0; x < xDim; x++) {
         for (int y = 0; y < yDim; y++) {
             if (getValueAt(x, y, field, xDim, yDim) == player) {
+                printf("Hey 2\n");
                 // Try all movements
                 for (int dir = -1; dir <= 1; dir++) {
                     int xNew = x - player;
@@ -126,6 +129,8 @@ bool executeTurn(int* field, int xDim, int yDim, int player, int depth) {
 
                         // Store state of the target position
                         int newPosition = getValueAt(xNew, yNew, field, xDim, yDim);
+
+                        printf("Hey 3\n");
 
                         // Check if the turn is legal
                         int moveAllowed = abs(dir) + (newPosition * player);  // Zero if you move straight and the target position is empty 
@@ -142,18 +147,16 @@ bool executeTurn(int* field, int xDim, int yDim, int player, int depth) {
                             setValueAt(x, y, EMPTY, field, xDim, yDim);
                             setValueAt(xNew, yNew, player, field, xDim, yDim);
 
+                            printf("Hey 4\n");
+
                             // Check if a win condition is reached
                             if (xNew == (1 - player)/2 * (xDim - 1)) {
-                                //printField(field, xDim, yDim, 1);
-                                //std::cout << player << " wins" << std::endl;
-                                //std::cout << std::endl;
-                                //printTabs(depth);
-                                //printf("--> %d wins\n\n", player);
-                                //gameCount++;
-                                //turnCount += depth;
                                 // Revert changes
                                 setValueAt(x, y, player, field, xDim, yDim);
                                 setValueAt(xNew, yNew, newPosition, field, xDim, yDim);
+
+                                printf("Hey 5\n");
+
                                 return true;
                             }
 
@@ -162,6 +165,8 @@ bool executeTurn(int* field, int xDim, int yDim, int player, int depth) {
                             // Revert changes
                             setValueAt(x, y, player, field, xDim, yDim);
                             setValueAt(xNew, yNew, newPosition, field, xDim, yDim);
+
+                            printf("Hey 6\n");
 
                             if (!canEnemyWin) {
                                 //printTabs(depth);
@@ -179,6 +184,7 @@ bool executeTurn(int* field, int xDim, int yDim, int player, int depth) {
         //turnCount += depth;
     //}
     //printf("\n\n");
+    printf("Hey 7\n");
     return false;
 }
 
@@ -189,8 +195,13 @@ void kernel(int* fields, int fieldCount, int xDim, int yDim, int player, bool* r
     int stride = blockDim.x * gridDim.x;
 
     for (int i = index; i < fieldCount; i += stride) {
-        if (executeTurn(getFieldFromList(fields, i, xDim, yDim), xDim, yDim, player, 0)) {
-            *result = true;
+        *(result + i) = false;
+        bool canWin = executeTurn(getFieldFromList(fields, i, xDim, yDim), xDim, yDim, player, 0);
+        if (canWin) {
+            *(result + i) = true;
+            printf("Wins: %d\n", i);
+        } else {
+            *(result + i) = false;
         }
     }
 }
@@ -327,8 +338,9 @@ int main(void) {
         }
     }
     file.close();
-    totalFieldCount--;
+    // Supposing there's no ';' at the end of the file
     printf("Field count: %d\n", totalFieldCount);
+
     /*
     for (int i = 0; i < totalFieldCount; i++) {
         std::cout << std::endl;
@@ -340,20 +352,63 @@ int main(void) {
     cudaMallocManaged(&deviceFieldList, totalFieldCount * xDim * yDim * sizeof(int));
     cudaMemcpy(deviceFieldList, turnList, totalFieldCount * xDim * yDim * sizeof(int), cudaMemcpyHostToDevice);
 
-    bool result = false;
-    //cudaMallocManaged(&result, sizeof(bool));
+    /*
+    for (int i = 0; i < totalFieldCount; i++) {
+        std::cout << std::endl;
+        printField(getFieldFromList(deviceFieldList, i, xDim, yDim), xDim, yDim, 0);
+    }
+    */
+
+    bool* result;
+    cudaMallocManaged(&result, totalFieldCount * sizeof(bool));
+    cudaMemset(result, false, totalFieldCount * sizeof(bool));
 
     int blockSize = 256;
     int numBlocks = (totalFieldCount + blockSize - 1) / blockSize;
-    kernel<<<numBlocks, blockSize>>>(deviceFieldList, totalFieldCount, xDim, yDim, WHITE, &result);
+    kernel<<<numBlocks, blockSize>>>(deviceFieldList, totalFieldCount, xDim, yDim, WHITE, result);
 
     cudaDeviceSynchronize();
+
+    for (int i = 0; i < totalFieldCount; i++) {
+        int r = *(result + i);
+        printf("%d: %s\n", i, r ? "true" : "false");
+    }
+    //printf("%d: %s\n", i, *result ? "true" : "false");
+
     cudaFree(deviceFieldList);
-
-    printf("Result: %s", result ? "true" : "false");
-
+    cudaFree(result);
     free(turnList);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 int* determineTurns(int* field, int xDim, int yDim, int player, int* count) {
 
