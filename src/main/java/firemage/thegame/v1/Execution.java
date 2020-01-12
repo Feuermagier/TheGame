@@ -1,7 +1,6 @@
-package firemage.thegame;
+package firemage.thegame.v1;
 
 import firemage.thegame.concurrent.AbortableCountDownLatch;
-import firemage.thegame.concurrent.ThreadState;
 
 import java.util.concurrent.TimeUnit;
 

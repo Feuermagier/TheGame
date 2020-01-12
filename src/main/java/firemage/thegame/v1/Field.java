@@ -1,4 +1,4 @@
-package firemage.thegame;
+package firemage.thegame.v1;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1,7 +1,6 @@
-package firemage.thegame;
+package firemage.thegame.v1;
 
 import firemage.thegame.concurrent.AbortableCountDownLatch;
-import firemage.thegame.concurrent.ThreadState;
 
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -152,13 +151,13 @@ public class TheGame {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        int[][] field = {{-1, -1, -1, -1}, {-1, -1, -1, -1}, {0, 0, 0, 0}, {1, 1, 1, 1}, {1, 1, 1, 1}};
+        int[][] field = {{-1, -1, -1}, {-1, -1, -1}, {0, 0, 0}, {0, 0, 0}, {1, 1, 1}, {1, 1, 1}};
         System.out.println("Game to analyze: ");
         System.out.println(arrayToString(field, 1));
         System.out.println("\nWorking...\n\n");
         long startTime = System.nanoTime();
-        boolean player = new TheGame().runFromState(new Field(field), 0);
-        //boolean player = new TheGame().setupThreads(new Field(field));
+        //boolean player = new TheGame().runFromState(new Field(field), 0);
+        boolean player = new TheGame().setupThreads(new Field(field));
         long endTime = System.nanoTime();
         System.out.println("\n\n--------------------------------------------------------");
         System.out.println(player ? "White wins!" : "Black wins!");

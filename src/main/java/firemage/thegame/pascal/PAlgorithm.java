@@ -1,4 +1,4 @@
-package firemage.thegame;
+package firemage.thegame.pascal;
 
 import java.util.*;
 public class PAlgorithm {

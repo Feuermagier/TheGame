@@ -1,9 +1,4 @@
-package firemage.thegame.concurrent;
-
-import firemage.thegame.Direction;
-import firemage.thegame.Field;
-import firemage.thegame.GameState;
-import firemage.thegame.TheGame;
+package firemage.thegame.v1;
 
 import java.util.Scanner;
 
