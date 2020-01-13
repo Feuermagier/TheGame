@@ -1,13 +1,7 @@
 package firemage.thegame.v1;
 
 import firemage.thegame.concurrent.AbortableCountDownLatch;
-<<<<<<< HEAD:src/main/java/firemage/thegame/TheGame.java
-import firemage.thegame.concurrent.ThreadState;
-import scala.annotation.meta.field;
-=======
->>>>>>> ba6feb2f695d526d0c9ee65c45f8f5c854e32c98:src/main/java/firemage/thegame/v1/TheGame.java
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -159,12 +153,7 @@ public class TheGame {
     }
 
     public static void main(String[] args) throws InterruptedException {
-<<<<<<< HEAD:src/main/java/firemage/thegame/TheGame.java
-
-        int[][] field = {{-1, -1}, {-1, -1}, {0, 0}, {0, 0}, {1, 1}, {1, 1}};
-=======
         int[][] field = {{-1, -1, -1}, {-1, -1, -1}, {0, 0, 0}, {0, 0, 0}, {1, 1, 1}, {1, 1, 1}};
->>>>>>> ba6feb2f695d526d0c9ee65c45f8f5c854e32c98:src/main/java/firemage/thegame/v1/TheGame.java
         System.out.println("Game to analyze: ");
         System.out.println(arrayToString(field, 1));
 

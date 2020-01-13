@@ -1,8 +1,27 @@
 package firemage.thegame.v2;
 
 public class AlgorithmV2 {
-    /* package-private */ static boolean executeTurn(int[][] field, int player, int depth) {
+    /* package-private */ static boolean executeTurn(int[][] field, int player, int depth, boolean predictWin) {
         //System.out.println(Main.arrayToString(field, depth) + "\n");
+
+        int targetRow = (1 - player) / 2 * (field.length-1);
+
+        // Advanced win condition
+
+        if (predictWin) {
+            for(int y = 0; y < field[0].length; y++) {
+                if(field[targetRow + player][y] == player) {
+                    if(y - 1 >= 0 && field[targetRow][y - 1] == -player) {
+                        return true;
+                    } else if(field[targetRow][y] == 0) {
+                        return true;
+                    } else if(y + 1 < field[0].length && field[targetRow][y + 1] == -player) {
+                        return true;
+                    }
+                }
+            }
+        }
+
         for (int x = 0; x < field.length; x++) {
             for (int y = 0; y < field[0].length; y++) {
                 if (field[x][y] == player) {
@@ -21,7 +40,7 @@ public class AlgorithmV2 {
                             if (moveAllowed == 0) {
 
                                 // Check if a win condition is reached
-                                if (xNew == (1 - player) / 2 * (field.length-1)) {
+                                if (xNew == targetRow) {
                                     return true;
                                 }
 
@@ -33,7 +52,7 @@ public class AlgorithmV2 {
                                 field[xNew][yNew] = player;
 
                                 // Check if the enemy cannot win after this turn, then return true: If you execute this turn, you will win
-                                if (!executeTurn(field, -player, depth + 1)) {
+                                if (!executeTurn(field, -player, depth + 1, predictWin)) {
                                     // Revert changes
                                     field[x][y] = player;
                                     field[xNew][yNew] = prevNewPos;

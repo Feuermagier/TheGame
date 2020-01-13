@@ -18,26 +18,25 @@ public class GameRunnerV2 {
     private static final int CPU_CORE_LEFTOVER = 1;
     private static final int LATCH_WAIT_MS = 100;
 
-    public Statistics runGame(int[][] field, Player player, boolean parallel, int cores) throws InterruptedException, TheGameException {
+    public Statistics runGame(int[][] field, Player player, boolean parallel, int cores, boolean predictWin) throws InterruptedException, TheGameException {
 
         if (parallel) {
-            return runGameParallel(field, player, cores);
+            return runGameParallel(field, player, cores, predictWin);
         } else {
-            return runGameSerial(field, player);
+            return runGameSerial(field, player, predictWin);
         }
     }
 
-    private Statistics runGameSerial(int[][] field, Player player) {
+    private Statistics runGameSerial(int[][] field, Player player, boolean predictWin) {
         long beforeTime = System.nanoTime();
-        boolean result = AlgorithmV2.executeTurn(field, player == Player.WHITE ? WHITE : BLACK, 0);
+        boolean result = AlgorithmV2.executeTurn(field, player == Player.WHITE ? WHITE : BLACK, 0, predictWin);
         long afterTime = System.nanoTime();
         return new Statistics(result ? player : player.other(), (afterTime - beforeTime)/1000, 0, 0, 1);
     }
 
-    private Statistics runGameParallel(int[][] field, Player player, int core) throws TheGameException, InterruptedException {
+    private Statistics runGameParallel(int[][] field, Player player, int cores, boolean predictWin) throws TheGameException, InterruptedException {
         int intPlayer = player == Player.WHITE ? WHITE : BLACK;
-        int coresToUse = Runtime.getRuntime().availableProcessors() - CPU_CORE_LEFTOVER;
-        ExecutorService executorService = Executors.newFixedThreadPool(coresToUse);
+        ExecutorService executorService = Executors.newFixedThreadPool(cores);
         List<ExecutionV2> executions = new ArrayList<>();
 
         try {
@@ -59,7 +58,7 @@ public class GameRunnerV2 {
                         System.out.println(Util.arrayToString(t, 1) + "\n");
                     }
                     long threadStartTime = System.nanoTime();
-                    if (!AlgorithmV2.executeTurn(t, intPlayer, 2))
+                    if (!AlgorithmV2.executeTurn(t, intPlayer, 2, predictWin))
                         latch.countDown();
                     else
                         latch.abort();
@@ -94,7 +93,7 @@ public class GameRunnerV2 {
             }
             long endTime = System.nanoTime();;
 
-            return new Statistics(wins ? player : player.other(), (endTime - startTime) / 1000, 0, 0, coresToUse);
+            return new Statistics(wins ? player : player.other(), (endTime - startTime) / 1000, 0, 0, cores);
 
         } finally {
             executorService.shutdownNow();

@@ -17,6 +17,9 @@ public class Main {
     @Parameter(names = "-cores", description = "Cores to use in parallel mode. Default is one less than available virtual cores")
     private int cores = Math.max(Runtime.getRuntime().availableProcessors() - 1, 1);
 
+    @Parameter(names = "-predict-win", description = "Decides whether the algorithm should try to predict the win of a player in its next turn. May speed up the analysis")
+    private boolean predictWin = false;
+
     public static void main(String[] args) {
         Main main = new Main();
         JCommander commander = new JCommander(main);
@@ -41,12 +44,14 @@ public class Main {
             } else {
                 System.out.println("Running in serial mode.");
             }
+            if (predictWin)
+                System.out.println("Trying to predict win of a player.");
             System.out.println("Working...\n\n");
 
-            Statistics statistics = new GameRunnerV2().runGame(config.getField(), config.getStartingPlayer(), parallel, cores);
+            Statistics statistics = new GameRunnerV2().runGame(config.getField(), config.getStartingPlayer(), parallel, cores, predictWin);
             System.out.println("\n\n--------------------------------------------------------\n");
             System.out.println(statistics.getWonPlayer() + " wins!\n\n");
-            System.out.println("Duration: " + statistics.getDurationMicroseconds() + "µs");
+            System.out.println("Duration: " + statistics.getDurationMicroseconds() + "µs ( ~" + Math.round(statistics.getDurationMicroseconds() / 1000000f) + "s )");
             System.out.println("Used " + statistics.getCoresUsed() + " core(s) out of " + Runtime.getRuntime().availableProcessors() + " core(s)");
 
         } catch (InterruptedException e) {
