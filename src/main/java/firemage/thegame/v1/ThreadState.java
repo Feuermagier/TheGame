@@ -1,4 +1,4 @@
-package firemage.thegame.concurrent;
+package firemage.thegame.v1;
 
 public enum ThreadState {
     WHITE_WINS,
