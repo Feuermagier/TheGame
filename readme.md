@@ -35,4 +35,5 @@ the white players target row is the row with x = 0.
 
 
 Example:
+
 w,5,4,b,b,b,b,b,b,b,b,0,0,0,0,w,w,w,w,w,w,w,w
