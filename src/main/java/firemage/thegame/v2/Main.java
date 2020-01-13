@@ -8,21 +8,22 @@ import java.io.IOException;
 
 public class Main {
 
-    @Parameter(names = "-parallel", description = "Run in parallel mode for faster execution")
+    @Parameter(names = "-parallel", description = "Run in parallel mode for faster execution", order = 1)
     private boolean parallel = false;
 
-    @Parameter(names = "-file", description = "Name of the game configuration file", required = true)
+    @Parameter(names = "-file", description = "Name of the game configuration file", required = true, order = 0)
     private String filename;
 
-    @Parameter(names = "-cores", description = "Cores to use in parallel mode. Default is one less than available virtual cores")
+    @Parameter(names = "-cores", description = "Cores to use in parallel mode. Default is one less than available virtual cores", order = 2)
     private int cores = Math.max(Runtime.getRuntime().availableProcessors() - 1, 1);
 
-    @Parameter(names = "-predict-win", description = "Decides whether the algorithm should try to predict the win of a player in its next turn. May speed up the analysis")
+    @Parameter(names = "-predict-win", description = "Decides whether the algorithm should try to predict the win of a player in its next turn. May speed up the analysis.", order = 3)
     private boolean predictWin = false;
 
     public static void main(String[] args) {
         Main main = new Main();
         JCommander commander = new JCommander(main);
+        commander.setProgramName("TheGame.jar");
         try {
             commander.parse(args);
             main.run();
@@ -46,7 +47,7 @@ public class Main {
             }
             if (predictWin)
                 System.out.println("Trying to predict win of a player.");
-            System.out.println("Working...\n\n");
+            System.out.println("\nWorking...\n\n");
 
             Statistics statistics = new GameRunnerV2().runGame(config.getField(), config.getStartingPlayer(), parallel, cores, predictWin);
             System.out.println("\n\n--------------------------------------------------------\n");
