@@ -63,7 +63,7 @@ public class GameRunnerV2 {
                         latch.countDown();
                     else
                         latch.abort();
-                    System.out.println(Thread.currentThread().getName() + " finished after " + ((System.nanoTime() - threadStartTime) / 1000) + "μs. Looking for new work...\n");
+                    System.out.println(Thread.currentThread().getName() + " finished after " + ((System.nanoTime() - threadStartTime) / 1000) + " microseconds. Looking for new work...\n");
                 }));
                 executions.add(new ExecutionV2(latch));
             }
