@@ -27,7 +27,7 @@ java -jar TheGame.jar [options]
 
 The config file should contain one line of the following pattern (players should be marked 'w'/'white' or 
 'b'/'black' (case insensitive)):
-<starting player>,<x-Dimension>,<y-Dimension>,<field data>
+\<starting player\>,\<x-Dimension\>,\<y-Dimension\>,\<field data\>
 
 The field data is a comma-separated list of all field positions. A positions is marked either with '0' (empty), 
 'b' (black pawn) or 'w' (white pawn) (case insensitive). The black players target row is the row with the highest x index,
