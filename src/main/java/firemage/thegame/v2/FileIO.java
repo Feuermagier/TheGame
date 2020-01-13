@@ -13,6 +13,7 @@ public class FileIO {
         scanner.useDelimiter(",");
 
         try {
+            // Parse initial data
             String playerInput = scanner.next();
             Player startingPlayer;
             switch (playerInput.toLowerCase()) {
@@ -31,19 +32,24 @@ public class FileIO {
             int xDim = scanner.nextInt();
             int yDim = scanner.nextInt();
 
+            // Parse field data
             int[][] field = new int[xDim][yDim];
-
             for (int x = 0; x < xDim; x++) {
                 for (int y = 0; y < yDim; y++) {
                     String pos = scanner.next().toLowerCase();
-                    if (pos.equals("w"))
-                        field[x][y] = 1;
-                    else if(pos.equals("b"))
-                        field[x][y] = -1;
-                    else if (pos.equals("0"))
-                        field[x][y] = 0;
-                    else
-                        throw new ConfigurationException("Your file contains an invalid position index");
+                    switch (pos) {
+                        case "w":
+                            field[x][y] = 1;
+                            break;
+                        case "b":
+                            field[x][y] = -1;
+                            break;
+                        case "0":
+                            field[x][y] = 0;
+                            break;
+                        default:
+                            throw new ConfigurationException("Your file contains an invalid position index");
+                    }
                 }
             }
             if (scanner.hasNext()) {
