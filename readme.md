@@ -39,8 +39,9 @@ Example:
 w,5,4,b,b,b,b,b,b,b,b,0,0,0,0,w,w,w,w,w,w,w,w
 
 represents
-b b b b
-b b b b
-0 0 0 0
-w w w w
-w w w w
+
+b b b b  
+b b b b  
+0 0 0 0  
+w w w w  
+w w w w  
