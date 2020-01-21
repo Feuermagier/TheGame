@@ -153,7 +153,7 @@ public class TheGame {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        int[][] field = {{-1, -1, -1}, {-1, -1, -1}, {0, 0, 0}, {0, 0, 0}, {1, 1, 1}, {1, 1, 1}};
+        int[][] field = {{-1, -1}, {-1, -1}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {1, 1}, {1, 1}};
         System.out.println("Game to analyze: ");
         System.out.println(arrayToString(field, 1));
 

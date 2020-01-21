@@ -1,12 +1,13 @@
-package firemage.thegame.concurrent;
+package firemage.thegame.v2;
 
+import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-public class AbortableCountDownLatch extends CountDownLatch {
+public class AbortableCountDownLatchV2 extends CountDownLatch {
     protected boolean aborted = false;
 
-    public AbortableCountDownLatch(int count) {
+    public AbortableCountDownLatchV2(int count) {
         super(count);
     }
 
@@ -32,6 +33,13 @@ public class AbortableCountDownLatch extends CountDownLatch {
         if (aborted)
             throw new AbortedException();
         return rtrn;
+    }
+
+    public ThreadState evaluate(long timeout, TimeUnit unit) throws InterruptedException {
+        final boolean rtrn = super.await(timeout,unit);
+        if (aborted)
+            return ThreadState.ABORTED;
+        return rtrn ? ThreadState.COUNTED_DOWN : ThreadState.WORKING;
     }
 
     @Override

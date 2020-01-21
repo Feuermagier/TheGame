@@ -1,8 +1,8 @@
-Algo v2, parallel, 12 cores, predicting win:
+Algo v2.1, parallel, 12 cores, predicting win:
 [B, B, B, B]
 [B, B, B, B]
 [0, 0, 0, 0]
 [0, 0, 0, 0]
 [W, W, W, W]
 [W, W, W, W]
---> White wins (8 min)
+--> White wins (46 min)
