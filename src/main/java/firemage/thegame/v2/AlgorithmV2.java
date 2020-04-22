@@ -1,6 +1,7 @@
 package firemage.thegame.v2;
 
 public class AlgorithmV2 {
+
     /* package-private */ static boolean executeTurn(int[][] field, int player, int depth) {
         //System.out.println(Main.arrayToString(field, depth) + "\n");
         for (int x = 0; x < field.length; x++) {

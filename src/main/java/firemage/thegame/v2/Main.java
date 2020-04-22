@@ -46,7 +46,7 @@ public class Main {
             Statistics statistics = new GameRunnerV2().runGame(config.getField(), config.getStartingPlayer(), parallel, cores);
             System.out.println("\n\n--------------------------------------------------------\n");
             System.out.println(statistics.getWonPlayer() + " wins!\n\n");
-            System.out.println("Duration: " + statistics.getDurationMicroseconds() + "µs");
+            System.out.println("Duration: " + statistics.getDurationMicroseconds() + " microseconds");
             System.out.println("Used " + statistics.getCoresUsed() + " core(s) out of " + Runtime.getRuntime().availableProcessors() + " core(s)");
 
         } catch (InterruptedException e) {

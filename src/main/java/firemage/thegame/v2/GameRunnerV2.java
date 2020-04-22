@@ -34,10 +34,9 @@ public class GameRunnerV2 {
         return new Statistics(result ? player : player.other(), (afterTime - beforeTime)/1000, 0, 0, 1);
     }
 
-    private Statistics runGameParallel(int[][] field, Player player, int core) throws TheGameException, InterruptedException {
+    private Statistics runGameParallel(int[][] field, Player player, int cores) throws TheGameException, InterruptedException {
         int intPlayer = player == Player.WHITE ? WHITE : BLACK;
-        int coresToUse = Runtime.getRuntime().availableProcessors() - CPU_CORE_LEFTOVER;
-        ExecutorService executorService = Executors.newFixedThreadPool(coresToUse);
+        ExecutorService executorService = Executors.newFixedThreadPool(cores);
         List<ExecutionV2> executions = new ArrayList<>();
 
         try {
@@ -94,7 +93,7 @@ public class GameRunnerV2 {
             }
             long endTime = System.nanoTime();;
 
-            return new Statistics(wins ? player : player.other(), (endTime - startTime) / 1000, 0, 0, coresToUse);
+            return new Statistics(wins ? player : player.other(), (endTime - startTime) / 1000, 0, 0, cores);
 
         } finally {
             executorService.shutdownNow();
