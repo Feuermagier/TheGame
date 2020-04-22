@@ -21,7 +21,7 @@ public class AbortableCountDownLatch extends CountDownLatch {
             return;
 
         this.aborted = true;
-        while (getCount()>0)
+        while (getCount() > 0)
             countDown();
     }
 

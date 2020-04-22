@@ -2,6 +2,9 @@ package firemage.thegame.v1;
 
 import firemage.thegame.concurrent.AbortableCountDownLatch;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -18,7 +21,6 @@ public class TheGame {
     private static long gameCount = 0;
 
     public boolean runFromState(Field field, int depth) {
-
         List<Field> whiteTurns = getPossibleTurns(field, WHITE);
         if (isWinPredictable(field, WHITE)) {
             //System.out.println(tabs(depth) + "White will win");
@@ -151,9 +153,11 @@ public class TheGame {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        int[][] field = {{-1, -1, -1}, {-1, -1, -1}, {0, 0, 0}, {0, 0, 0}, {1, 1, 1}, {1, 1, 1}};
+        int[][] field = {{-1, -1}, {-1, -1}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {1, 1}, {1, 1}};
         System.out.println("Game to analyze: ");
         System.out.println(arrayToString(field, 1));
+
+
         System.out.println("\nWorking...\n\n");
         long startTime = System.nanoTime();
         //boolean player = new TheGame().runFromState(new Field(field), 0);
@@ -165,8 +169,14 @@ public class TheGame {
         System.out.println("\tSimulation took " + (endTime - startTime)/1000 + "μs");
         System.out.println("\t~" + turnCount + " turns simulated");
         System.out.println("\t~" + gameCount + " games simulated");
-        System.out.println("\tA game took an average of " + (turnCount/gameCount) + " turns");
+        System.out.println("\tOne game took ~" + (turnCount/gameCount) + " turns");
         System.exit(0); // Cut off all threads
+
+        /*
+        int player = WHITE;
+        List<Field> turns = new TheGame().runTurns(6, new Field(field), player);
+        writeToFile(new File("output.txt"), turns, player);
+         */
     }
 
     public static GameState isWinConditionReached(int player, Field field) {
@@ -233,5 +243,50 @@ public class TheGame {
             str.append(tabs(tabs)).append(Arrays.toString(row)).append("\n");
         }
         return str.substring(0, str.length()-1).replace("-1", "S").replace("1", "W");
+    }
+
+    public List<Field> runTurns(int turnCount, Field field, int player) {
+        List<Field> turns = new ArrayList<>();
+        turns.add(field);
+        for (int i = 0; i < turnCount; i++) {
+            List<Field> tmpTurns = new ArrayList<>();
+            for (Field t : turns) {
+                tmpTurns.addAll(getPossibleTurns(t, player));
+            }
+            turns = tmpTurns;
+            player *= -1;
+        }
+        return turns;
+    }
+
+    public static void writeToFile(File file, List<Field> fields, int player) {
+        try {
+            FileWriter writer = new FileWriter(file);
+            writer.write((player == 1 ? "W" : "S") + ";");
+            int xDim = fields.get(0).getMaxX() + 1;
+            int yDim = fields.get(0).getMaxY() + 1;
+            writer.write(xDim + ";");
+            writer.write(yDim + ";");
+            writer.flush();
+            for (Field f : fields) {
+                int[][] array = f.getState();
+                for(int x = 0; x < array.length; x++) {
+                    for(int y = 0; y < array[0].length; y++) {
+                        int pos = array[x][y];
+                        if (pos == 0) {
+                            writer.write("0");
+                        } else if (pos == WHITE) {
+                            writer.write("W");
+                        } else {
+                            writer.write("S");
+                        }
+                    }
+                }
+                writer.write(";");
+            }
+            writer.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

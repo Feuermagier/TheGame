@@ -16,7 +16,7 @@ public class FileIO {
             // Parse initial data
             String playerInput = scanner.next();
             Player startingPlayer;
-            switch (playerInput.toLowerCase()) {
+            switch (playerInput.toLowerCase().trim()) {
                 case "w":
                 case "white":
                     startingPlayer = Player.WHITE;
@@ -36,7 +36,7 @@ public class FileIO {
             int[][] field = new int[xDim][yDim];
             for (int x = 0; x < xDim; x++) {
                 for (int y = 0; y < yDim; y++) {
-                    String pos = scanner.next().toLowerCase();
+                    String pos = scanner.next().toLowerCase().trim();
                     switch (pos) {
                         case "w":
                             field[x][y] = 1;
@@ -48,7 +48,7 @@ public class FileIO {
                             field[x][y] = 0;
                             break;
                         default:
-                            throw new ConfigurationException("Your file contains an invalid position index");
+                            throw new ConfigurationException("Your file contains an invalid position index: '" + pos + "'");
                     }
                 }
             }
@@ -58,7 +58,7 @@ public class FileIO {
             return new GameConfiguration(field, startingPlayer);
 
         } catch (InputMismatchException ex) {
-            throw new ConfigurationException("Your file contains a non-number character at an position where a number is excpected", ex);
+            throw new ConfigurationException("Your file contains a non-number character at an position where a number is expected", ex);
         } catch (NoSuchElementException ex) {
             throw new ConfigurationException("Your file contains to less position data", ex);
         } finally {

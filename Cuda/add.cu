@@ -19,8 +19,7 @@ void add(int n, float *x, float *y)
 }
 int x = 3;
 
-int main(void)
-{
+int main(void) {
 
   int N = 1<<20;
   float *x, *y;
