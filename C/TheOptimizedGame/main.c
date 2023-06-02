@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/time.h>
+#include <pthread.h>
 
 #define WHITE 1
 #define BLACK -1
@@ -71,8 +72,8 @@ int algorithm(int player) {
 
 
 
-int main()
-{
+int main() {
+
     long start, end;
     struct timeval timecheck;
 
@@ -92,3 +93,6 @@ int main()
     printf("Duration: %ld microseconds\n", (end - start));
     return 0;
 }
+
+
+

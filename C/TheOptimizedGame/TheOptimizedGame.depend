@@ -1,7 +1,8 @@
 # depslib dependency file v1.0
-1587562239 source:c:\thegame\thegame\c\theoptimizedgame\main.c
+1587574349 source:c:\thegame\thegame\c\theoptimizedgame\main.c
 	<stdio.h>
 	<stdlib.h>
 	<unistd.h>
 	<sys/time.h>
+	<pthread.h>
 
